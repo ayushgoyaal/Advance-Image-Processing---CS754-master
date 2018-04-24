@@ -1,0 +1,340 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment2-1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-02-21"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assignment2-1 - ISTA </h1> <h2> Rollno: 163059009, 16305R011 </h2> <!--introduction--><!--/introduction-->
+<h2>Contents</h2>
+<div><ul><li><a href="#2">Init</a></li><li><a href="#3">1. Part (a) y = x + eta</a></li><li><a href="#4">1.1 Rescontruction</a></li><li><a href="#6">2. Part b</a></li><li><a href="#7">reconstruction</a></li><li><a href="#8">3. Part c</a></li><li><a href="#9">Showing Signal</a></li><li><a href="#10">Creating A matrix</a></li></ul></div>
+<h2>Init<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>;
+file=<span class="string">'barbara256.png'</span>;
+img=imread(file);
+img=double(img);
+<span class="comment">%%img=im2double(img);</span>
+
+
+figure(<span class="string">'name'</span>,<span class="string">'Original barbara'</span>);
+imshow(img,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Original barbara}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>1. Part (a) y = x + eta<a name="3"></a></h2><pre class="codeinput">[H,W]=size(img);
+
+NoisyImg=img+getGuassainNoise(H,W,10);
+
+figure(<span class="string">'name'</span>,<span class="string">'noisy barbara'</span>);
+imshow(NoisyImg,[]);
+title(<span class="string">'\fontsize{10}{\color{red}noisy barbara}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2>1.1 Rescontruction<a name="4"></a></h2><pre class="codeinput">patchSize=8; alphaAdd=3.0;
+convergeVal=0.1; lambda=30;
+
+outImg=reconstruct(NoisyImg,patchSize,lambda,convergeVal,alphaAdd);
+</pre><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'outImg barbara'</span>);
+imshow(outImg,[]);
+title(<span class="string">'\fontsize{10}{\color{magenta}outImg barbara}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+
+<span class="comment">% Mean square error</span>
+rmse=getRMSE(outImg,img );
+fprintf(<span class="string">'RMS Error: %f\n'</span>,rmse);
+pause(1);
+</pre><pre class="codeoutput">RMS Error: 6.510685
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2>2. Part b<a name="6"></a></h2><pre class="codeinput">
+[H,W]=size(img);
+epsilon=0.039;
+patchSize=8;
+
+figure(<span class="string">'name'</span>,<span class="string">'original barbara'</span>);
+imshow(img,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Original barbara}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>2.1 Reconstruction<a name="7"></a></h2><pre class="codeinput">
+
+<span class="comment">% RMS Error: 11.859743</span>
+tic
+lambda=1;
+convergeVal=0.1;
+alphaAdd=35.0;
+outImg=reconstructb(img,patchSize,lambda,convergeVal,alphaAdd);
+
+figure(<span class="string">'name'</span>,<span class="string">'outImg barbara'</span>);
+imshow(outImg,[]);
+title(<span class="string">'\fontsize{10}{\color{magenta}outImg barbara}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+
+<span class="comment">% Mean square error</span>
+rmse=getRMSE(outImg,img );
+fprintf(<span class="string">'RMS Error: %f\n'</span>,rmse);
+toc
+pause(1);
+</pre><pre class="codeoutput">RMS Error: 11.859743
+Elapsed time is 296.468263 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2>3. Part (c)<a name="8"></a></h2><p>N : signal length</p><pre class="codeinput">rng(3,<span class="string">'twister'</span>);
+
+N = 100;
+x = zeros(N,1);
+pos=randi([1,100],10,1);
+x(pos)=randi([-100,100],10,1);
+
+<span class="comment">% Define filter</span>
+num = [1, 2, 3, 4, 3, 2, 1]; dnum = 16;
+hx = filter(num,dnum,x);
+
+noise = 0.05*max(x)*randn(N,1);
+y = hx + noise;
+</pre><h2>3.1 Showing Signal<a name="9"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Sparse Signal'</span>);
+plot(x)
+title(<span class="string">'\fontsize{10}{\color{red}Sparse Signal}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+figure(<span class="string">'name'</span>,<span class="string">'Convolution Signal'</span>);
+plot(hx)
+title(<span class="string">'\fontsize{10}{\color{magenta}Convolution Signal}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+figure(<span class="string">'name'</span>,<span class="string">'Noisy Signal'</span>);
+plot(y)
+title(<span class="string">'\fontsize{10}{\color{magenta}Noisy Signal}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> 
+<h2>3.2 Creating A matrix<a name="10"></a></h2><p>Deriving H matrix(circulant matrix derived from blur kernel)</p><pre class="codeinput">NUM=zeros(100,100);
+[~,numlen]=size(num);
+<span class="keyword">for</span> i=1:N-numlen+1
+    NUM(i,i:numlen+i-1)=num;
+<span class="keyword">end</span>
+DNUM=zeros(100,100);
+[k,numlen]=size(dnum);
+<span class="keyword">for</span> i=1:N-numlen+1
+    DNUM(i,i:numlen+i-1)=dnum;
+<span class="keyword">end</span>
+H=DNUM\NUM';
+<span class="comment">% deconvolution</span>
+lam=1.8;
+convergeVal=0.000001;
+alphaAdd=3.0;
+alpha=eigs((H'*H),1)+alphaAdd;
+theta=ISTA(y,H,lam,convergeVal,alpha);
+figure(<span class="string">'name'</span>,<span class="string">'cleaned Signal'</span>);
+plot(theta)
+title(<span class="string">'\fontsize{10}{\color{magenta}cleaned Signal}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+</pre><img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+%% Assignment1-5 
+% Rollno: 163059009, 16305R011 
+
+%% Init
+clear all;
+file='barbara256.png';
+img=imread(file);
+img=double(img);
+%%img=im2double(img);
+
+
+figure('name','Original barbara');
+imshow(img,[]);
+title('\fontsize{10}{\color{red}Original barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+%% 1. Part (a) y = x + eta  
+[H,W]=size(img);
+
+stdDev=10;
+NoisyImg=img+getGuassainNoise(H,W,stdDev);
+
+figure('name','noisy barbara');
+imshow(NoisyImg,[]);
+title('\fontsize{10}{\color{red}noisy barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+
+%% 1.1 Rescontruction 
+patchSize=8; alphaAdd=3.0;
+convergeVal=0.1; lambda=30;
+
+outImg=reconstruct(NoisyImg,patchSize,lambda,convergeVal,alphaAdd);
+
+%%
+figure('name','outImg barbara');
+imshow(outImg,[]);
+title('\fontsize{10}{\color{magenta}outImg barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+% Mean square error
+rmse=getRMSE(outImg,img );
+fprintf('RMS Error: %f\n',rmse);
+pause(1);
+%% 2. Part b
+
+[H,W]=size(img);
+epsilon=0.039;
+patchSize=8;
+
+figure('name','original barbara');
+imshow(img,[]);
+title('\fontsize{10}{\color{red}Original barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+%% reconstruction 
+tic
+lambda=1;
+convergeVal=0.1;
+alphaAdd=35.0;
+outImg=reconstructb(img,patchSize,lambda,convergeVal,alphaAdd);
+
+
+figure('name','outImg barbara');
+imshow(outImg,[]);
+title('\fontsize{10}{\color{magenta}outImg barbara}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+% Mean square error
+rmse=getRMSE(outImg,img );
+fprintf('RMS Error: %f\n',rmse);
+toc
+pause(1);
+%% 3. Part c
+% N : signal length
+rng(3,'twister');
+
+N = 100;                            
+x = zeros(N,1);
+pos=randi([1,100],10,1);
+x(pos)=randi([-100,100],10,1);
+
+% Define filter
+num = [1, 2, 3, 4, 3, 2, 1]; dnum = 16;                        
+hx = filter(num,dnum,x);
+
+noise = 0.05*max(x)*randn(N,1);
+y = hx + noise;
+
+%% Showing Signal
+figure('name','Sparse Signal');
+plot(x)
+title('\fontsize{10}{\color{red}Sparse Signal}');
+axis tight,axis on;
+
+figure('name','Convolution Signal');
+plot(hx)
+title('\fontsize{10}{\color{magenta}Convolution Signal}');
+axis tight,axis on;
+
+figure('name','Noisy Signal');
+plot(y)
+title('\fontsize{10}{\color{magenta}Noisy Signal}');
+axis tight,axis on;
+
+%% Creating A matrix
+% Deriving H matrix(circulant matrix derived from blur kernel)
+NUM=zeros(100,100);
+[~,numlen]=size(num);
+for i=1:N-numlen+1
+    NUM(i,i:numlen+i-1)=num;
+end
+DNUM=zeros(100,100);
+[k,numlen]=size(dnum);
+for i=1:N-numlen+1
+    DNUM(i,i:numlen+i-1)=dnum;
+end
+H=DNUM\NUM';
+% deconvolution
+lam=1.8;
+convergeVal=0.000001;
+alphaAdd=3.0;
+alpha=eigs((H'*H),1)+alphaAdd;  
+theta=ISTA(y,H,lam,convergeVal,alpha);
+figure('name','cleaned Signal');
+plot(theta)
+title('\fontsize{10}{\color{magenta}cleaned Signal}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+##### SOURCE END #####
+--></body></html>

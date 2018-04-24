@@ -1,0 +1,495 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment4-1: KSVD</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-28"><meta name="DC.source" content="main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assignment4-1: KSVD</h1><!--introduction--><p>Rollno: 163059009, 16305R011</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Init</a></li><li><a href="#2">1. Part a: Creating Dictionary</a></li><li><a href="#3">1.1 Creating Signal</a></li><li><a href="#4">1.2 Finding Dict,xCoeff for every</a></li><li><a href="#6">1.2.1 Create Y and PHI</a></li><li><a href="#7">1.2.2 Blind Sensing</a></li><li><a href="#8">1.2.3 average relative error</a></li><li><a href="#10">1.3 Ploting Graph</a></li><li><a href="#11">2.PART B</a></li><li><a href="#12">2.1 Reading dataset</a></li><li><a href="#13">2.2 Taking 600 samples per digit and 20 sample as test from train set</a></li><li><a href="#14">2.3 Learning</a></li><li><a href="#15">2.4 Plot of Avg. Relative Error</a></li><li><a href="#16">2.5  Sample Plot of Dictionary learnt</a></li><li><a href="#17">2.6 Showing Reconstruction Result M=90</a></li><li><a href="#18">2.7 Observation</a></li><li><a href="#19">3 Part C : Classification</a></li><li><a href="#20">3.1 Reading Data</a></li><li><a href="#21">3.2 Training: Learning Dictionary</a></li><li><a href="#22">3.3 Plot Classification rate</a></li></ul></div><h2>Init<a name="1"></a></h2><pre class="codeinput">m=[10,20,30,40,50,70,90];
+f=[0.001, 0.01, 0.02, 0.05, 0.1, 0.3];
+</pre><h2>1. Part a: Creating Dictionary<a name="2"></a></h2><pre class="codeinput">K=20;p=100;
+D=randn(p,K);
+<span class="comment">% unit normalization</span>
+<span class="keyword">for</span> i=1:K;
+    D(:,i)=D(:,i)/norm(D(:,i));
+<span class="keyword">end</span>
+</pre><h2>1.1 Creating Signal<a name="3"></a></h2><p>signal</p><pre class="codeinput">N=100;
+X=zeros(N,p);
+<span class="keyword">for</span> i=1:N
+    support=randi([1 20],1,5);
+    coeff=randi([0 10],1,5);
+    X(:,i)=coeff*D(:,support)';
+<span class="keyword">end</span>
+</pre><h2>1.2 Finding Dict,xCoeff for every<a name="4"></a></h2><pre class="codeinput">avgError=zeros(size(f,2),size(m,2));
+epsilon=1e-4;
+<span class="keyword">for</span> fi=1:size(f,2)
+    <span class="keyword">for</span> mi=1:size(m,2)
+</pre><pre class="codeinput">        fprintf(<span class="string">'**f:%f  m:%f\n'</span>,f(fi),m(mi));
+</pre><h2>1.2.1 Create Y and PHI<a name="6"></a></h2><pre class="codeinput">        [y,phi,phiTphi,stdev] = initDataSet(X,p,N,m(mi),f(fi));
+</pre><h2>1.2.2 Blind Sensing<a name="7"></a></h2><pre class="codeinput">        [Dict,xCoeff]=ksvd1(y,phi,phiTphi,stdev,p,X,K,epsilon);
+</pre><h2>1.2.3 average relative error<a name="8"></a></h2><pre class="codeinput">        rerr=0;
+        predX=Dict*xCoeff;
+        avr=avgRelativeError(X, predX);
+        fprintf(<span class="string">'%f\n'</span>,avr);
+        avgError(fi,mi)=avr;
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>1.3 Ploting Avg Relative error Graph<a name="10"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Avg. Relative error'</span>)
+avgError=avgError/max(avgError(:));
+x=m; c = {<span class="string">'r'</span>,<span class="string">'g'</span>,<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'y'</span>,<span class="string">'black'</span>};
+<span class="keyword">for</span> i=1:size(f,2)
+    y=avgError(i,:);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{i})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+xlabel(<span class="string">'m'</span>);
+ylabel(<span class="string">'error'</span>);
+legend(<span class="string">'f:001'</span>,<span class="string">'f:01'</span>,<span class="string">'f:02'</span>,<span class="string">'f:05'</span>, <span class="string">'f:0.1'</span>,<span class="string">'f:0.3'</span>);
+</pre><img vspace="5" hspace="5" src="main_01.png" alt=""> <h2>2.PART B<a name="11"></a></h2><h2>2.1 Reading dataset<a name="12"></a></h2><pre class="codeinput"><span class="comment">%clear all;</span>
+trainFP=<span class="string">'../data/train-images.idx3-ubyte'</span>;
+trainLabelFP=<span class="string">'../data/train-labels.idx1-ubyte'</span>;
+[trainDS,trainLabel]=loadMNISTImages(trainFP,trainLabelFP);
+</pre><h2>2.2 Taking 600 samples per digit and 20 sample as test from train set<a name="13"></a></h2><pre class="codeinput">noImgPerDigit=600;testImgPerDigit=20;imgDim=[16,16];
+[trainSampleImg,testSampleImg] = extractDigitFromDS(trainDS,trainLabel,imgDim,noImgPerDigit,testImgPerDigit);
+</pre><h2>2.3 Learning<a name="14"></a></h2><pre class="codeinput">m=[10,20,30,40,50,70,90];f=0.01;
+k=[20,128];epsilon=0.5;
+
+dctDic=kron(dctmtx(16)',dctmtx(16)');
+avg=zeros(numel(m),numel(k)+1);
+tic
+<span class="keyword">for</span> mi=1:numel(m)
+    mVal=m(mi);trainPhi=[];phiTphi=[]; p=imgDim(1)*imgDim(2);
+    [trainY,trainPhi,phiTphi,stdev] = initDataSet(trainSampleImg,p,noImgPerDigit*10,mVal,f);
+    [testY,testPhi,~,~] = initDataSet(testSampleImg,p,testImgPerDigit*10,mVal,f);
+    fprintf(<span class="string">'---------------[m=%d]------------\n'</span>,m(mi));
+    finalMDic=cell(2,1);
+    <span class="keyword">for</span> ki=1:numel(k)
+        K=k(ki);
+        <span class="comment">% Blind C.S</span>
+        [Dict,xCoeff]=ksvd1(trainY,trainPhi,phiTphi,stdev,p,trainSampleImg,K,epsilon);
+        finalMDic{ki,1}=Dict;
+        <span class="comment">% Testing With Learnt Dictionary</span>
+        [xCoeff_ld ] = mnistTestDictionary(testY,testPhi,Dict,K);
+        avg(mi,ki)=avgRelativeError(testSampleImg, Dict*xCoeff_ld);
+        fprintf(<span class="string">'* Avg Relative error for reconst K=%d m=%d: Learnt Dic:%f \n'</span>,K,m(mi),avg(mi,ki));
+    <span class="keyword">end</span>
+    <span class="comment">% Testing With 2d-dct</span>
+    [xCoeff_dct ] = mnistTestDictionary(testY,testPhi,dctDic,p);
+    avg(mi,3)=avgRelativeError(testSampleImg, dctDic*xCoeff_dct);
+    fprintf(<span class="string">'* Avg Relative error for reconst Dct m=%d: Learnt Dic:%f \n'</span>,m(mi),avg(mi,3));
+    clear <span class="string">trainPhi</span>; clear <span class="string">phiTphi</span>; clear <span class="string">testPhi</span>;
+<span class="keyword">end</span>
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.000417 seconds.
+</pre><h2>2.4 Plot of Avg. Relative Error<a name="15"></a></h2><p>Saving result, as computaion take lot of time.</p><pre class="codeinput"><span class="comment">%ar=[1.43582507102219,1.47311022290318,1.44161561024575;0.739858959113047,1.12173712426321,1.36259732663280;0.529096232944518,0.706685417784461,1.26414821496327;0.494868704273532,0.541428800858013,1.21166575432871;0.476777496154944,0.466403455015577,1.08882794296314;0.459544304033737,0.408229865999871,0.980470443744333;0.443397365520370,0.382988035062376,0.843107021588696]</span>
+figure(<span class="string">'name'</span>,<span class="string">'Avg. Relative error'</span>)
+avg=ar;
+avg=avg./max(avg(:));
+x=m; c = {<span class="string">'b'</span>,<span class="string">'m'</span>,<span class="string">'r'</span>};
+<span class="keyword">for</span> i=1:size(avg,2)
+    y=avg(:,i);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{i})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+grid <span class="string">on</span>;
+xlabel(<span class="string">'m'</span>);
+ylabel(<span class="string">'Avg. Relative error'</span>);
+legend(<span class="string">'K:80'</span>,<span class="string">'K:128'</span>,<span class="string">'DCT'</span>);
+</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2>2.5  Sample Plot of Dictionary learnt<a name="16"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Dictionary'</span>)
+<span class="comment">% K=20 m=90</span>
+Dict=finalMDic{1};
+<span class="keyword">for</span> i=1:20
+    subplot(4,5,i);
+    img=reshape(Dict(:,i),16,16);
+    imshow(img,[]);
+<span class="keyword">end</span>
+curfig=gcf;
+title(curfig.Children(end-2),<span class="string">'\fontsize{10}{\color{magenta}Dictionary Learnt with K:20 and m:90}'</span>);
+save(<span class="string">'D_20_90.mat'</span>,<span class="string">'Dict'</span>);
+
+<span class="comment">% K=128 m=90</span>
+figure(<span class="string">'name'</span>,<span class="string">'Dictionary'</span>)
+Dict=finalMDic{2};
+<span class="keyword">for</span> i=1:20
+    subplot(4,5,i);
+    img=reshape(Dict(:,i),16,16);
+    imshow(img,[]);
+<span class="keyword">end</span>
+curfig=gcf;
+title(curfig.Children(end-2),<span class="string">'\fontsize{10}{\color{magenta}Dictionary Learnt with K:128 and m:90}'</span>);
+save(<span class="string">'D_128_90.mat'</span>,<span class="string">'Dict'</span>);
+</pre><img vspace="5" hspace="5" src="main_03.png" alt=""> <img vspace="5" hspace="5" src="main_04.png" alt=""> <h2>2.6 Showing Reconstruction Result M=90<a name="17"></a></h2><p>Showing Reconstruction for K-128 and M=90</p><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Reconstruction Learnt Dic Result'</span>)
+Dict=finalMDic{2};
+<span class="keyword">for</span> i=1:10
+    subplot(3,4,i);
+    imshow(reshape(Dict*xCoeff_ld(:,(i-1)*testImgPerDigit+13),16,16),[])
+<span class="keyword">end</span>
+curfig=gcf;
+txt=strcat(<span class="string">'\fontsize{10}{\color{magenta}Reconst via "Learnt Dic" with K:128 and m:90}'</span>);
+title(curfig.Children(end-1),txt);
+
+<span class="comment">%DCT</span>
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction 2d-DCT Result'</span>)
+<span class="keyword">for</span> i=1:10
+    subplot(3,4,i);
+    imshow(reshape(dctDic*xCoeff_dct(:,(i-1)*testImgPerDigit+13),16,16),[])
+<span class="keyword">end</span>
+curfig=gcf;
+txt=strcat(<span class="string">'\fontsize{10}{\color{magenta}Reconst via"2d-DCT" with  m:90}'</span>);
+title(curfig.Children(end-2),txt);
+</pre><img vspace="5" hspace="5" src="main_05.png" alt=""> <img vspace="5" hspace="5" src="main_06.png" alt=""> <h2>2.7 Observation<a name="18"></a></h2><p>Reconstruction using the learnt basis is much better than the DCT bais when M is 90 i.e with less no. of measurment the reconstruction using learnt method is very good as compared to DCT dictionary Also with K as 128, it give much better result than K as 20.</p><h2>3 Part C : Classification<a name="19"></a></h2><h2>3.1 Reading Data<a name="20"></a></h2><pre class="codeinput">trainFP=<span class="string">'../data/train-images.idx3-ubyte'</span>;
+trainLabelFP=<span class="string">'../data/train-labels.idx1-ubyte'</span>;
+[trainDS,trainLabel]=loadMNISTImages(trainFP,trainLabelFP);
+
+testFP=<span class="string">'../data/t10k-images.idx3-ubyte'</span>;
+testLabelFP=<span class="string">'../data/t10k-labels.idx1-ubyte'</span>;
+[testDS,testLabel]=loadMNISTImages(trainFP,trainLabelFP);
+
+noImgPerDigit=600;testImgPerDigit=20;
+[trainSampleImg,~] = extractDigitFromDS(trainDS,trainLabel,[16,16],noImgPerDigit,0);
+[testSampleImg,~] = extractDigitFromDS(testDS,testLabel,[16,16],testImgPerDigit,0);
+lg=meshgrid([1:600]);lg=lg(:,1:10);
+trainSampleLabel=reshape(lg,size(lg,1)*size(lg,2),1);
+lg=meshgrid([1:20]);lg=lg(:,1:10);
+testSampleLabel=reshape(lg,size(lg,1)*size(lg,2),1);
+clear <span class="string">trainDS</span>; clear <span class="string">trainLabel</span>;clear <span class="string">testDS</span>; clear <span class="string">testLabel</span>;
+imgDim=[16,16];
+</pre><h2>3.2 Training: Learning Dictionary<a name="21"></a></h2><pre class="codeinput">m=[10,20,30,40,50,70,90];
+k=[80,128];f=0.01;
+classificationRate=zeros(numel(m),numel(k)+1);
+dctDic=kron(dctmtx(16)',dctmtx(16)');
+epsilon=1e-1;
+tic
+<span class="keyword">for</span> mi=1:numel(m)
+    mVal=m(mi);phi=[];phiTphi=[];
+    X=trainSampleImg; N=noImgPerDigit*10; p=imgDim(1)*imgDim(2);
+    [trainY,trainPhi,phiTphi,stdev] = initDataSet(X,p,N,mVal,f);
+    [testY,testPhi,~,~] = initDataSet(testSampleImg,p,testImgPerDigit*10,mVal,f);
+    fprintf(<span class="string">'---------------[m=%d]------------\n'</span>,m(mi));
+    <span class="keyword">for</span> ki=1:numel(k)
+        K=k(ki);
+        <span class="comment">% Blind C.S</span>
+        [Dict,trainXCoeff]=ksvd1(trainY,trainPhi,phiTphi,stdev,p,X,K,epsilon);
+
+        <span class="comment">% Testing: With Learnt Dictionary</span>
+        [testXCoeff] = mnistTestDictionary(testY,testPhi,Dict,K);
+        <span class="comment">% classifiying</span>
+        [cRate] = nearestNeighbour(trainXCoeff,trainSampleLabel,testXCoeff,testSampleLabel);
+        classificationRate(mi,ki)=cRate;
+    <span class="keyword">end</span>
+    <span class="comment">% Testing: With 2d-DCT Dictionary</span>
+    [trainXCoeff] = mnistTestDictionary(trainY,trainPhi,dctDic,p);
+    [testXCoeff ] = mnistTestDictionary(testY,testPhi,dctDic,p);
+    [cRate] = nearestNeighbour(trainXCoeff,trainSampleLabel,testXCoeff,testSampleLabel);
+    classificationRate(mi,3)=cRate;
+    clear <span class="string">trainPhi</span>;clear <span class="string">phiTphi</span>;clear <span class="string">testPhi</span>;
+<span class="keyword">end</span>
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.000666 seconds.
+</pre><h2>3.3 Plot Classification rate<a name="22"></a></h2><p>Saving Result: As running (3.3) takes hrs to run</p><pre class="codeinput"><span class="comment">%cr=[11.5000,8.50,9.5000;16,15,9.5000;57.00,38.500,14.500;72,70,15;73.5000,71.5000,23.5000;83,81.5000,32.500;84,82,36.50];</span>
+figure(<span class="string">'name'</span>,<span class="string">'Classification'</span>)
+classificationRate=cr;
+x=m; c = {<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'r'</span>};
+<span class="keyword">for</span> i=1:size(classificationRate,2)
+    y=classificationRate(:,i);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{i})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+grid <span class="string">on</span>;
+xlabel(<span class="string">'m'</span>);
+ylabel(<span class="string">'Classification rate %'</span>);
+legend(<span class="string">'K:80'</span>,<span class="string">'K:128'</span>,<span class="string">'DCT'</span>);
+</pre><img vspace="5" hspace="5" src="main_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Assignment4-1: KSVD
+% Rollno: 163059009, 16305R011 
+
+%%  Init
+m=[10,20,30,40,50,70,90];
+f=[0.001, 0.01, 0.02, 0.05, 0.1, 0.3];
+
+%% 1. Part a: Creating Dictionary
+K=20;p=100;
+D=randn(p,K);
+% unit normalization
+for i=1:K;
+    D(:,i)=D(:,i)/norm(D(:,i));
+end
+%% 1.1 Creating Signal
+% signal
+N=100;
+X=zeros(N,p);
+for i=1:N
+    support=randi([1 20],1,5);
+    coeff=randi([0 10],1,5);    
+    X(:,i)=coeff*D(:,support)';    
+end
+
+%% 1.2 Finding Dict,xCoeff for every
+avgError=zeros(size(f,2),size(m,2));
+epsilon=1e-4;
+for fi=1:0
+    for mi=1:size(m,2)
+        fprintf('**f:%f  m:%f\n',f(fi),m(mi));
+        %%  1.2.1 Create Y and PHI
+        [y,phi,phiTphi,stdev] = initDataSet(X,p,N,m(mi),f(fi));
+        %% 1.2.2 Blind Sensing        
+        [Dict,xCoeff]=ksvd1(y,phi,phiTphi,stdev,p,X,K,epsilon);
+
+        %% 1.2.3 average relative error
+        rerr=0;
+        predX=Dict*xCoeff;
+        avr=avgRelativeError(X, predX);
+        fprintf('%f\n',avr);
+        avgError(fi,mi)=avr;
+    end
+end
+%% 1.3 Ploting Graph
+figure('name','Avg. Relative error')
+avgError=avgError/max(avgError(:));
+x=m; c = {'r','g','m','b','y','black'};
+for i=1:size(f,2)
+    y=avgError(i,:);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{i})),hold on      
+end
+xlabel('m');
+ylabel('error');
+legend('f:001','f:01','f:02','f:05', 'f:0.1','f:0.3');
+
+%% 2.PART B
+
+%% 2.1 Reading dataset
+%clear all;
+trainFP='../data/train-images.idx3-ubyte';
+trainLabelFP='../data/train-labels.idx1-ubyte';
+[trainDS,trainLabel]=loadMNISTImages(trainFP,trainLabelFP);
+
+%% 2.2 Taking 600 samples per digit and 20 sample as test from train set
+
+noImgPerDigit=600;testImgPerDigit=20;imgDim=[16,16];
+[trainSampleImg,testSampleImg] = extractDigitFromDS(trainDS,trainLabel,imgDim,noImgPerDigit,testImgPerDigit);
+%% 2.3 Learning
+
+m=[10,20,30,40,50,70,90];f=0.01;
+k=[20,128];epsilon=0.5;
+
+dctDic=kron(dctmtx(16)',dctmtx(16)');    
+avg=zeros(numel(m),numel(k)+1);
+tic
+for mi=1:0
+    mVal=m(mi);trainPhi=[];phiTphi=[]; p=imgDim(1)*imgDim(2);
+    [trainY,trainPhi,phiTphi,stdev] = initDataSet(trainSampleImg,p,noImgPerDigit*10,mVal,f);
+    [testY,testPhi,~,~] = initDataSet(testSampleImg,p,testImgPerDigit*10,mVal,f);
+    fprintf('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-[m=%d]REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH\n',m(mi));
+    finalMDic=cell(2,1);
+    for ki=1:numel(k)
+        K=k(ki);       
+        % Blind C.S
+        [Dict,xCoeff]=ksvd1(trainY,trainPhi,phiTphi,stdev,p,trainSampleImg,K,epsilon); 
+        finalMDic{ki,1}=Dict;
+        % Testing With Learnt Dictionary
+        [xCoeff_ld ] = mnistTestDictionary(testY,testPhi,Dict,K);
+        avg(mi,ki)=avgRelativeError(testSampleImg, Dict*xCoeff_ld);       
+        fprintf('* Avg Relative error for reconst K=%d m=%d: Learnt Dic:%f \n',K,m(mi),avg(mi,ki));
+    end
+    % Testing With 2d-dct
+    [xCoeff_dct ] = mnistTestDictionary(testY,testPhi,dctDic,p);
+    avg(mi,3)=avgRelativeError(testSampleImg, dctDic*xCoeff_dct);
+    fprintf('* Avg Relative error for reconst Dct m=%d: Learnt Dic:%f \n',m(mi),avg(mi,3));
+    clear trainPhi; clear phiTphi; clear testPhi;
+end
+toc
+%% 2.4 Plot of Avg. Relative Error
+% Saving result, as computaion take lot of time.
+%ar=[1.43582507102219,1.47311022290318,1.44161561024575;0.739858959113047,1.12173712426321,1.36259732663280;0.529096232944518,0.706685417784461,1.26414821496327;0.494868704273532,0.541428800858013,1.21166575432871;0.476777496154944,0.466403455015577,1.08882794296314;0.459544304033737,0.408229865999871,0.980470443744333;0.443397365520370,0.382988035062376,0.843107021588696]
+figure('name','Avg. Relative error')
+avg=ar;
+avg=avg./max(avg(:));
+x=m; c = {'b','m','r'};
+for i=1:size(avg,2)
+    y=avg(:,i);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{i})),hold on      
+end
+grid on;
+xlabel('m');
+ylabel('Avg. Relative error');
+legend('K:80','K:128','DCT');
+
+%% 2.5  Sample Plot of Dictionary learnt
+figure('name','Dictionary')
+% K=20 m=90
+Dict=finalMDic{1};
+for i=1:20    
+    subplot(4,5,i);
+    img=reshape(Dict(:,i),16,16);
+    imshow(img,[]);
+end
+curfig=gcf;
+title(curfig.Children(end-2),'\fontsize{10}{\color{magenta}Dictionary Learnt with K:20 and m:90}');
+save('D_20_90.mat','Dict');
+
+% K=128 m=90
+figure('name','Dictionary')
+Dict=finalMDic{2};
+for i=1:20    
+    subplot(4,5,i);
+    img=reshape(Dict(:,i),16,16);
+    imshow(img,[]);
+end
+curfig=gcf;
+title(curfig.Children(end-2),'\fontsize{10}{\color{magenta}Dictionary Learnt with K:128 and m:90}');
+save('D_128_90.mat','Dict');
+
+%% 2.6 Showing Reconstruction Result M=90
+% Showing Reconstruction for K-128 and M=90
+figure('name','Reconstruction Learnt Dic Result')
+Dict=finalMDic{2};
+for i=1:10
+    subplot(3,4,i);
+    imshow(reshape(Dict*xCoeff_ld(:,(i-1)*testImgPerDigit+13),16,16),[])
+end
+curfig=gcf;
+txt=strcat('\fontsize{10}{\color{magenta}Reconst via "Learnt Dic" with K:128 and m:90}');
+title(curfig.Children(end-1),txt);
+
+%DCT
+figure('name','Reconstruction 2d-DCT Result')
+for i=1:10
+    subplot(3,4,i);
+    imshow(reshape(dctDic*xCoeff_dct(:,(i-1)*testImgPerDigit+13),16,16),[])
+end
+curfig=gcf;
+txt=strcat('\fontsize{10}{\color{magenta}Reconst via"2d-DCT" with  m:90}');
+title(curfig.Children(end-2),txt);
+%% 2.7 Observation
+% Reconstruction using the learnt basis is much better than the DCT bais
+% when M is 90 i.e with less no. of measurment the reconstruction using
+% learnt method is very good as compared to DCT dictionary
+% Also with K as 128, it give much better result than K as 20.   
+%% 3 Part C : Classification
+
+%% 3.1 Reading Data 
+trainFP='../data/train-images.idx3-ubyte';
+trainLabelFP='../data/train-labels.idx1-ubyte';
+[trainDS,trainLabel]=loadMNISTImages(trainFP,trainLabelFP);
+
+testFP='../data/t10k-images.idx3-ubyte';
+testLabelFP='../data/t10k-labels.idx1-ubyte';
+[testDS,testLabel]=loadMNISTImages(trainFP,trainLabelFP);
+
+noImgPerDigit=600;testImgPerDigit=20;
+[trainSampleImg,~] = extractDigitFromDS(trainDS,trainLabel,[16,16],noImgPerDigit,0);
+[testSampleImg,~] = extractDigitFromDS(testDS,testLabel,[16,16],testImgPerDigit,0);
+lg=meshgrid([1:600]);lg=lg(:,1:10);
+trainSampleLabel=reshape(lg,size(lg,1)*size(lg,2),1);
+lg=meshgrid([1:20]);lg=lg(:,1:10);
+testSampleLabel=reshape(lg,size(lg,1)*size(lg,2),1);
+clear trainDS; clear trainLabel;clear testDS; clear testLabel;
+imgDim=[16,16];
+%% 3.2 Training: Learning Dictionary
+m=[10,20,30,40,50,70,90];
+k=[80,128];f=0.01;
+classificationRate=zeros(numel(m),numel(k)+1);
+dctDic=kron(dctmtx(16)',dctmtx(16)');
+epsilon=1e-1;
+tic
+for mi=1:0
+    mVal=m(mi);phi=[];phiTphi=[];
+    X=trainSampleImg; N=noImgPerDigit*10; p=imgDim(1)*imgDim(2);
+    [trainY,trainPhi,phiTphi,stdev] = initDataSet(X,p,N,mVal,f);
+    [testY,testPhi,~,~] = initDataSet(testSampleImg,p,testImgPerDigit*10,mVal,f);        
+    fprintf('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-[m=%d]REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH\n',m(mi));
+    for ki=1:numel(k)
+        K=k(ki);
+        % Blind C.S        
+        [Dict,trainXCoeff]=ksvd1(trainY,trainPhi,phiTphi,stdev,p,X,K,epsilon);
+        
+        % Testing: With Learnt Dictionary
+        [testXCoeff] = mnistTestDictionary(testY,testPhi,Dict,K);
+        % classifiying 
+        [cRate] = nearestNeighbour(trainXCoeff,trainSampleLabel,testXCoeff,testSampleLabel);
+        classificationRate(mi,ki)=cRate;
+    end
+    % Testing: With 2d-DCT Dictionary              
+    [trainXCoeff] = mnistTestDictionary(trainY,trainPhi,dctDic,p);
+    [testXCoeff ] = mnistTestDictionary(testY,testPhi,dctDic,p);    
+    [cRate] = nearestNeighbour(trainXCoeff,trainSampleLabel,testXCoeff,testSampleLabel);
+    classificationRate(mi,3)=cRate;
+    clear trainPhi;clear phiTphi;clear testPhi;                
+end
+toc
+%% 3.3 Plot Classification rate
+% Saving Result: As running (3.3) takes hrs to run
+%cr=[11.5000,8.50,9.5000;16,15,9.5000;57.00,38.500,14.500;72,70,15;73.5000,71.5000,23.5000;83,81.5000,32.500;84,82,36.50];
+figure('name','Classification')
+classificationRate=cr;
+x=m; c = {'m','b','r'};
+for i=1:size(classificationRate,2)
+    y=classificationRate(:,i);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{i})),hold on      
+end
+grid on;
+xlabel('m');
+ylabel('Classification rate %');
+legend('K:80','K:128','DCT');
+
+##### SOURCE END #####
+--></body></html>

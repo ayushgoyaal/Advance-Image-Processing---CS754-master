@@ -1,0 +1,433 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tomography</title><meta name="generator" content="MATLAB 8.6">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2018-03-16"><meta name="DC.source" content="mainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Tomography</h1> <h2> Assignment3-2 <br/> 163059009, 16305R011 </h2><!--introduction--><!--/introduction-->
+<h2>Contents</h2><div><ul><li><a href="#2">Init</a></li><li><a href="#3">0)  Finding Projection</a></li><li><a href="#4">Part a)  RamLak filter</a></li><li><a href="#5">Using irandon method of Matlab</a></li><li><a href="#6">2. Part b) Compressed Sensing</a></li><li><a href="#7">2.1 Sovling equation using L1_Ls</a></li><li><a href="#8">3. Part c) Coupled CS</a></li><li><a href="#9">3.1 Init Operator</a></li><li><a href="#10">3.2 Solving</a></li><li><a href="#11">3.3 Showing Result</a></li><li><a href="#12">4. Part c) Coupled CS # Slices</a></li><li><a href="#13">Original Image</a></li><li><a href="#14">3.1 Init Operator</a></li><li><a href="#15">3.2 Solving</a></li><li><a href="#16">3.3 Showing Result</a></li></ul></div><h2>Assignment3-2<a name="1"></a></h2><p>Rollno: 163059009, 16305R011</p><h2>Init<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>;
+addpath(genpath(<span class="string">'l1_ls_matlab/'</span>));
+
+file1=<span class="string">'../data/t1_icbm_normal_1mm_pn0_rf20.rawb.png'</span>;
+file2=<span class="string">'../data/t1_icbm_normal_1mm_pn3_rf20.rawb.png'</span>;
+img1=imread(file1);
+img1=double(img1);
+img2=imread(file2);
+img2=double(img2);
+
+figure(<span class="string">'name'</span>,<span class="string">'Original brain cross section image'</span>);
+imshow(img1,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Brain cross section image}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+o1 = get(gca, <span class="string">'Position'</span>);
+colorbar(),set(gca, <span class="string">'Position'</span>, o1);
+</pre><img vspace="5" hspace="5" src="mainScript_01.png" alt=""> <h2>0)  Finding Projection<a name="3"></a></h2><pre class="codeinput">totalAngles=18;
+theta = randi([0 179],1,totalAngles);
+[R,xp] = radon(img1,theta);
+</pre><h2>Part a)  RamLak filter<a name="4"></a></h2><p>We have implemented our OWN RAMLAK implemented</p><pre class="codeinput">imgRamLak=RamLakFilter(R,theta);
+
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction using RamLak Filter'</span>);
+imshow(imgRamLak,[]);
+title(<span class="string">'\fontsize{10}{\color{magenta} Reconstruction using "Own" RamLak Filtered BP}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_02.png" alt=""> <h2>Using irandon method of Matlab<a name="5"></a></h2><pre class="codeinput">I2 = iradon(R,theta,<span class="string">'linear'</span>,<span class="string">'Ram-Lak'</span>);
+
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction using RamLak Filter'</span>);
+imshow(I2,[]);
+title(<span class="string">'\fontsize{10}{\color{magenta} Reconstruction using "iradon" RamLak Filtered BP}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_03.png" alt=""> <h2>2. Part b) Compressed Sensing<a name="6"></a></h2><p>E(x) = <tt>y &#8722; Ax</tt>^2 + &#955;|x|_1 y= sum total of # of bins for each angle</p><pre class="codeinput">m=size(R,1);
+n=size(img1,1)*size(img1,2);
+A=CSProjMtx(m,n,theta);
+At=A';
+</pre><h2>2.1 Sovling equation using L1_Ls<a name="7"></a></h2><pre class="codeinput">vecR=reshape(R,m*numel(theta),1);
+y=vecR;
+lambda = 8;
+[beta,status]=l1_ls(A,At,size(y,1),n,y,lambda);
+
+dctcoeff=reshape(beta,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction using CS'</span>);
+imshow(f,[]);
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconstruction using CS}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_04.png" alt=""> <h2>3. Part c) Coupled CS with 2 slice<a name="8"></a></h2>
+<p><img src="mainScript_eq01765951132684515451.png" alt="$E(\beta_1,\beta_2) =  ||y_1 - R_1U\beta_1||^2 + ||y_2 - R_2U\beta_2||^2$"> + <img src="mainScript_eq07834620411119653999.png" alt="$\lambda||\beta_1||_1 + \lambda||\beta_2-\beta_1||_1$"></p><p><img src="mainScript_eq15474143382771167988.png" alt="$=  ||y_1 - R_1U\beta_1||^2 + ||y_2 - R_2U(\beta_1 + \Delta\beta_{21})||^2 + ||y_3 - R_3U(\beta_1 + \Delta\beta_{21} + \Delta\beta_{32})||^2$"> + <img src="mainScript_eq08779528902481608689.png" alt="$\lambda||\beta_1||_1 + \lambda||\Delta\beta_{21}||_1$"></p><p>Convert this in to matrix form.</p>
+<pre class="codeinput">totalAngles=18;
+theta1 = randi([0 179],1,totalAngles);
+theta2 = randi([0 179],1,totalAngles);
+[R1,xp1] = radon(img1,theta1);
+[R2,xp2] = radon(img2,theta2);
+</pre><h2>3.1 Init Operator<a name="9"></a></h2><pre class="codeinput">projSize=size(R1,1);
+h=size(img1,1);w=size(img1,2);
+coupleSize=2;
+A=CoupledCSProjMtx(projSize,h,w,coupleSize,{theta1,theta2});
+At=A';
+</pre><h2>3.2 Solving<a name="10"></a></h2><pre class="codeinput">R=horzcat(R1,R2);
+vecR=reshape(R,projSize*totalAngles*coupleSize,1);
+y=vecR;
+m=size(y,1);n=size(img1,1)*size(img1,2)*coupleSize;
+lambda = 8;
+[betas,status]=l1_ls(A,At,m,n,y,lambda);
+</pre><h2>3.3 Showing Result<a name="11"></a></h2><pre class="codeinput">bcell=getBetaMtxFromVec(A,betas);
+beta1=bcell{1};betaDiff=bcell{2};
+beta2=betaDiff+beta1;
+
+<span class="comment">% Image 1</span>
+dctcoeff=reshape(beta1,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction using CS'</span>);
+subplot(1,2,1),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 1}'</span>);
+
+<span class="comment">% Image 2</span>
+dctcoeff=reshape(beta2,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,2,2),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 2}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_05.png" alt=""> <h2>4. Part c) Coupled CS with 3 Slices<a name="12"></a></h2>
+<p><img src="mainScript_eq17721837432692735379.png" alt="$E(\beta_1,\beta_2,\beta_3) =  ||y_1 - R_1U\beta_1||^2 + ||y_2 - R_2U\beta_2||^2 + ||y_3 - R_3U\beta_3||^2$"> + <img src="mainScript_eq17135665331501009797.png" alt="$\lambda||\beta_1||_1 + \lambda||\beta_2-\beta_1||_1  + \lambda||\beta_3-\beta_2||_1$"></p><p><img src="mainScript_eq15474143382771167988.png" alt="$=  ||y_1 - R_1U\beta_1||^2 + ||y_2 - R_2U(\beta_1 + \Delta\beta_{21})||^2 + ||y_3 - R_3U(\beta_1 + \Delta\beta_{21} + \Delta\beta_{32})||^2$"> + <img src="mainScript_eq17151181812496917721.png" alt="$\lambda||\beta_1||_1 + \lambda||\Delta\beta_{21}||_1  + \lambda||\Delta\beta_{32}||_1$"></p><p>Convert this in to matrix form.</p>
+<pre class="codeinput">file1=<span class="string">'../data/slice_50.png'</span>;
+file2=<span class="string">'../data/slice_51.png'</span>;
+file3=<span class="string">'../data/slice_52.png'</span>;
+
+img1=imread(file1);img1=double(img1);
+img2=imread(file2);img2=double(img2);
+img3=imread(file3);img3=double(img3);
+[h,w]=size(img1);
+<span class="comment">%making image as sq as iradon return sq image</span>
+<span class="keyword">if</span> (h&lt;w)
+    diff=w-h;
+    left=floor(diff/2);
+    right=ceil(diff/2);
+    img1=padarray(img1,[left,0],0,<span class="string">'pre'</span>);img1=padarray(img1,[right,0],0,<span class="string">'post'</span>);
+    img2=padarray(img2,[left,0],0,<span class="string">'pre'</span>);img2=padarray(img2,[right,0],0,<span class="string">'post'</span>);
+    img3=padarray(img3,[left,0],0,<span class="string">'pre'</span>);img3=padarray(img3,[right,0],0,<span class="string">'post'</span>);
+<span class="keyword">end</span>
+coupleSize=3;
+totalAngles=18;
+theta1 = randi([0 179],1,totalAngles);
+theta2 = randi([0 179],1,totalAngles);
+theta3 = randi([0 179],1,totalAngles);
+[R1,xp1] = radon(img1,theta1);
+[R2,xp2] = radon(img2,theta2);
+[R3,xp3] = radon(img2,theta3);
+</pre><h2>Original Image<a name="13"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Original brain cross section image'</span>);
+imshow(img1,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Brain cross section image}'</span>);
+
+figure(<span class="string">'name'</span>,<span class="string">'Original brain cross section image'</span>);
+imshow(img2,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Brain cross section image}'</span>);
+
+figure(<span class="string">'name'</span>,<span class="string">'Original brain cross section image'</span>);
+imshow(img3,[]);
+title(<span class="string">'\fontsize{10}{\color{red}Brain cross section image}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_06.png" alt=""> <img vspace="5" hspace="5" src="mainScript_07.png" alt=""> <img vspace="5" hspace="5" src="mainScript_08.png" alt=""> <h2>3.1 Init Operator<a name="14"></a></h2><pre class="codeinput">projSize=size(R1,1);
+h=size(img1,1);w=size(img1,2);
+A=CoupledCSProjMtx(projSize,h,w,coupleSize,{theta1,theta2,theta3});
+At=A';
+</pre><h2>3.2 Solving<a name="15"></a></h2><pre class="codeinput">R=horzcat(R1,R2,R3);
+vecR=reshape(R,projSize*totalAngles*coupleSize,1);
+y=vecR;
+m=size(y,1);n=size(img1,1)*size(img1,2)*coupleSize;
+lambda =8;
+[betas,status]=l1_ls(A,At,m,n,y,lambda);
+</pre><h2>3.3 Showing Result<a name="16"></a></h2><pre class="codeinput">bcell=getBetaMtxFromVec(A,betas);
+beta1=bcell{1};betaDiff21=bcell{2};
+beta2=betaDiff21+beta1;betaDiff32=bcell{3};
+beta3=betaDiff32+beta2;
+
+<span class="comment">% Image 1</span>
+dctcoeff=reshape(beta1,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure(<span class="string">'name'</span>,<span class="string">'Reconstruction using CS'</span>);
+subplot(1,3,1),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 1}'</span>);
+
+<span class="comment">% Image 2</span>
+dctcoeff=reshape(beta2,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,3,2),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 2}'</span>);
+
+<span class="comment">% Image 3</span>
+dctcoeff=reshape(beta3,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,3,3),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title(<span class="string">'\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 3}'</span>);
+</pre><img vspace="5" hspace="5" src="mainScript_09.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tomography
+%% Assignment3-2 
+% Rollno: 163059009, 16305R011 
+
+%% Init
+clear all;
+addpath(genpath('l1_ls_matlab/'));
+
+file1='../data/t1_icbm_normal_1mm_pn0_rf20.rawb.png';
+file2='../data/t1_icbm_normal_1mm_pn3_rf20.rawb.png';
+img1=imread(file1);
+img1=double(img1);
+img2=imread(file2);
+img2=double(img2);
+
+figure('name','Original brain cross section image');
+imshow(img1,[]);
+title('\fontsize{10}{\color{red}Brain cross section image}');
+axis tight,axis on;
+o1 = get(gca, 'Position');
+colorbar(),set(gca, 'Position', o1);
+
+%% 0)  Finding Projection
+totalAngles=18;
+theta = randi([0 179],1,totalAngles);
+[R,xp] = radon(img1,theta);
+
+%% Part a)  RamLak filter
+% We have implemented our OWN RAMLAK implemented
+imgRamLak=RamLakFilter(R,theta);
+
+figure('name','Reconstruction using RamLak Filter');
+imshow(imgRamLak,[]);
+title('\fontsize{10}{\color{magenta} Reconstruction using "Own" RamLak Filtered BP}');
+
+
+%% Using irandon method of Matlab
+I2 = iradon(R,theta,'linear','Ram-Lak');
+
+figure('name','Reconstruction using RamLak Filter');
+imshow(I2,[]);
+title('\fontsize{10}{\color{magenta} Reconstruction using "iradon" RamLak Filtered BP}');
+
+
+%% 2. Part b) Compressed Sensing
+% E(x) = |y − Ax|^2 + λ|x|_1
+% y= sum total of # of bins for each angle
+m=size(R,1);
+n=size(img1,1)*size(img1,2);
+A=CSProjMtx(m,n,theta);
+At=A';
+%% 2.1 Sovling equation using L1_Ls 
+vecR=reshape(R,m*numel(theta),1);
+y=vecR;
+lambda = 8;
+[beta,status]=l1_ls(A,At,size(y,1),n,y,lambda);
+
+dctcoeff=reshape(beta,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure('name','Reconstruction using CS');
+imshow(f,[]);
+title('\fontsize{10}{\color{magenta}Reconstruction using CS}');
+
+%% 3. Part c) Coupled CS
+% E(x) = |y − Ax|^2 + λ|x|_1
+% y= sum total of # of bins for each angle
+
+totalAngles=18;
+theta1 = randi([0 179],1,totalAngles);
+theta2 = randi([0 179],1,totalAngles);
+[R1,xp1] = radon(img1,theta1);
+[R2,xp2] = radon(img2,theta2);
+
+%% 3.1 Init Operator
+projSize=size(R1,1);
+h=size(img1,1);w=size(img1,2);
+coupleSize=2;
+A=CoupledCSProjMtx(projSize,h,w,coupleSize,{theta1,theta2});
+At=A';
+
+%% 3.2 Solving
+R=horzcat(R1,R2);
+vecR=reshape(R,projSize*totalAngles*coupleSize,1);
+y=vecR;
+m=size(y,1);n=size(img1,1)*size(img1,2)*coupleSize;
+lambda = 8;
+[betas,status]=l1_ls(A,At,m,n,y,lambda);
+
+%% 3.3 Showing Result
+bcell=getBetaMtxFromVec(A,betas);
+beta1=bcell{1};betaDiff=bcell{2};
+beta2=betaDiff+beta1;
+
+% Image 1
+dctcoeff=reshape(beta1,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure('name','Reconstruction using CS');
+subplot(1,2,1),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title('\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 1}');
+
+% Image 2
+dctcoeff=reshape(beta2,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,2,2),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title('\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 2}');
+
+%% 4. Part c) Coupled CS # Slices
+% E(x) = |y − Ax|^2 + λ|x|_1
+% y= sum total of # of bins for each angle
+
+file1='../data/slice_50.png';
+file2='../data/slice_51.png';
+file3='../data/slice_52.png';
+
+img1=imread(file1);img1=double(img1);
+img2=imread(file2);img2=double(img2);
+img3=imread(file3);img3=double(img3);
+[h,w]=size(img1);
+%making image as sq as iradon return sq image
+if (h<w)
+    diff=w-h;
+    left=floor(diff/2);
+    right=ceil(diff/2);
+    img1=padarray(img1,[left,0],0,'pre');img1=padarray(img1,[right,0],0,'post');
+    img2=padarray(img2,[left,0],0,'pre');img2=padarray(img2,[right,0],0,'post');
+    img3=padarray(img3,[left,0],0,'pre');img3=padarray(img3,[right,0],0,'post');    
+end
+coupleSize=3;
+totalAngles=18;
+theta1 = randi([0 179],1,totalAngles);
+theta2 = randi([0 179],1,totalAngles);
+theta3 = randi([0 179],1,totalAngles);
+[R1,xp1] = radon(img1,theta1);
+[R2,xp2] = radon(img2,theta2);
+[R3,xp3] = radon(img2,theta3);
+
+%% Original Image
+
+figure('name','Original brain cross section image');
+imshow(img1,[]);
+title('\fontsize{10}{\color{red}Brain cross section image}');
+
+figure('name','Original brain cross section image');
+imshow(img2,[]);
+title('\fontsize{10}{\color{red}Brain cross section image}');
+
+figure('name','Original brain cross section image');
+imshow(img3,[]);
+title('\fontsize{10}{\color{red}Brain cross section image}');
+%% 3.1 Init Operator
+projSize=size(R1,1);
+h=size(img1,1);w=size(img1,2);
+A=CoupledCSProjMtx(projSize,h,w,coupleSize,{theta1,theta2,theta3});
+At=A';
+
+%% 3.2 Solving
+R=horzcat(R1,R2,R3);
+vecR=reshape(R,projSize*totalAngles*coupleSize,1);
+y=vecR;
+m=size(y,1);n=size(img1,1)*size(img1,2)*coupleSize;
+lambda =8;
+[betas,status]=l1_ls(A,At,m,n,y,lambda);
+
+%% 3.3 Showing Result
+bcell=getBetaMtxFromVec(A,betas);
+beta1=bcell{1};betaDiff21=bcell{2};
+beta2=betaDiff21+beta1;betaDiff32=bcell{3};
+beta3=betaDiff32+beta2;
+
+% Image 1
+dctcoeff=reshape(beta1,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+figure('name','Reconstruction using CS');
+subplot(1,3,1),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title('\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 1}');
+
+% Image 2
+dctcoeff=reshape(beta2,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,3,2),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title('\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 2}');
+
+% Image 3
+dctcoeff=reshape(beta3,size(img1,1),size(img1,2));
+f=idct2(dctcoeff);
+subplot(1,3,3),
+img=(f-min(f(:)));img=img/max(img(:));
+imshow(img),colorbar
+title('\fontsize{10}{\color{magenta}Reconst using Coupled CS: Image 3}');
+
+
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,306 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Q3.f=f1+f2</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-31"><meta name="DC.source" content="MyMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Q3. f=f1+f2</h1><h2>Assignment4-3<a name="1"></a></h2> <h2><p>Rollno: 163059009, 16305R011</p></h2><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Assignment4-3</a></li><li><a href="#2">1.2 Init</a></li><li><a href="#3">1.2 Algo: Alternate Minimization</a></li><li><a href="#4">1.3. Creating f from f1 and f2 and reconstructing f1 &amp; f2 from f</a></li><li><a href="#5">1.4 Plot of error grpah: Avf. Realtive Error, F1 RMS &amp; F2 RMS</a></li></ul></div>
+<h2>1.2 Init<a name="2"></a></h2><pre class="codeinput">clear <span class="string">all</span>;
+f =zeros(128,1);
+s=[5,10,20,25,35,40,45,50];<span class="comment">%number of sparse elements per signal</span>
+<span class="comment">% sigma = 0.05&times; average value of f1 + f2 .</span>
+stdev=[0,0.1,0.3,0.4,0.6,0.8,1];
+
+<span class="comment">%s=[50];</span>
+<span class="comment">%stdev=[0];</span>
+A1 = conj(dftmtx(128))/128;
+A2=eye(128); <span class="comment">%identity matrix</span>
+<span class="comment">% Result Info</span>
+avg=zeros(size(s,2),size(stdev,2));
+f1Error=zeros(size(s,2),size(stdev,2));
+f2Error=zeros(size(s,2),size(stdev,2));
+predF1=zeros(128,size(s,2)*size(stdev,2));
+predF2=zeros(128,size(s,2)*size(stdev,2));
+</pre><h2>1.2 Algo: Alternate Minimization<a name="3"></a></h2><p>This algo uses the "Alternate Minimization" for the reconstruction.</p><p>Objective Function:</p><p><img src="MyMainScript_eq08895942973298850886.png" alt="$E(\theta_1,\theta_2) = || f-A_1\theta_1-A_2\theta_2||_2$">  <tt>s.t</tt> <img src="MyMainScript_eq03836294001499689239.png" alt="$\theta_1 \leq T_0$"> <tt>and</tt>  <img src="MyMainScript_eq07456461678573287336.png" alt="$\theta_2 \leq T_0$"></p><p>Where,</p><p><img src="MyMainScript_eq06017125278736816455.png" alt="$f1=A_1\theta_1$"> <tt>s.t</tt> <img src="MyMainScript_eq17641130316797944202.png" alt="$A_1 = \phi \Psi_1$"> <tt>s.t A1 is DFT matrix of 128x128 &amp;</tt> <img src="MyMainScript_eq04356345805472844781.png" alt="$\theta_1$"> <tt>is</tt> <img src="MyMainScript_eq09699377331652163485.png" alt="$T_0$"> <tt>sparse</tt></p><p><img src="MyMainScript_eq18017815724089804784.png" alt="$f2=A_2\theta_2$"> <tt>s.t</tt> <img src="MyMainScript_eq16873380485792325305.png" alt="$A_1 = \phi \Psi_2$"></p><p><img src="MyMainScript_eq08364158416649472666.png" alt="$\Psi_1$"> 1d-DFT Matrix, <img src="MyMainScript_eq10155281532908461614.png" alt="$\Psi_1 \in R^{128\times128}$"></p><p><img src="MyMainScript_eq14056941847710104420.png" alt="$\Psi_2$"> Identity Matrix, <img src="MyMainScript_eq10155281532908461614.png" alt="$\Psi_1 \in R^{128\times128}$"></p><p>As we know that by C.S theory identity matrix is highly <b>incoherent</b> with DFT.</p><p>So here, <img src="MyMainScript_eq06401276552089372917.png" alt="$\phi$"> is <b>Identity Matrix</b>, <img src="MyMainScript_eq11649208894757264926.png" alt="$\phi \in R^{128\times128}$"></p><p>Therefore,</p><p><img src="MyMainScript_eq11477367283114296154.png" alt="$A_1 = \Psi_1$"></p><p><img src="MyMainScript_eq12034704757699461353.png" alt="$A_2 =  \Psi_2$"></p><p><b>Algo</b></p><p>For finding <img src="MyMainScript_eq04356345805472844781.png" alt="$\theta_1$"> &amp; <img src="MyMainScript_eq17317125283182739185.png" alt="$\theta_2$">, we will use OMP with <img src="MyMainScript_eq09699377331652163485.png" alt="$T_0$">.</p><div><ul><li>Initalize: <img src="MyMainScript_eq17317125283182739185.png" alt="$\theta_2$"> to some random value</li><li>Do the following till convergence (ith iteration)</li></ul></div><div><ol><li><img src="MyMainScript_eq09275921122231115132.png" alt="$f'=f-A_2*\theta_2^i$"></li><li><img src="MyMainScript_eq00100269643313122335.png" alt="$\theta_1^{i+1} = OMP (f',A_1,T_0)$"></li><li><img src="MyMainScript_eq02145594364969986647.png" alt="$f''=f-A_1*\theta_1^{i+1}$"></li><li><img src="MyMainScript_eq16923033466406998451.png" alt="$\theta_2^{i+1} = OMP (f'',A_2,T_0)$"></li></ol></div><h2>1.3. Creating f from f1 and f2 and reconstructing f1 &amp; f2 from f<a name="4"></a></h2><pre class="codeinput">tic
+<span class="keyword">for</span> i=1:size(s,2)
+    fprintf(<span class="string">'-------------------[sparsity:%d]-------------------\n'</span>,s(i));
+    <span class="comment">% Creating signal f1 with s(i) sparse</span>
+    supportF1=randi([1,128],1,s(i));
+    coeff=randi([1,100],1,s(i));
+    f1=A1(:,supportF1)*coeff';
+
+    <span class="comment">% Creating signal f2 with s(i) sparse</span>
+    supportF2=randi([1,128],1,s(i));
+    coeff=randi([1,100],1,s(i)); <span class="comment">% can change this</span>
+    f2=A2(:,supportF2)*coeff';
+
+    <span class="comment">%Creating signal f</span>
+    f=f1+f2;T0=s(i); <span class="comment">% Used in OMP Algo</span>
+    <span class="keyword">for</span> j=1:size(stdev,2)
+          fprintf(<span class="string">'###########[std:%f]##############\n'</span>,stdev(j));
+        <span class="comment">% Adding Noise added</span>
+        std=stdev(j).*mean(f);
+        noise=randn(128,1)*std;
+        noisyF=f+noise;
+        <span class="comment">% Using alternate min. technique to find coeffs</span>
+        [f1Separated,f2Separated]=findSepratedSignals(noisyF,A1,A2,T0);
+        <span class="comment">%fprintf('sparsity=%d sigma=%f error=%f\n',s(i),stdev(j),norm(f-(f1Separated+f2Separated)));</span>
+        avg(i,j)=avgRelativeError([f1,f2],[f1Separated,f2Separated]);
+        f1Error(i,j)=rmse(f1,f1Separated);
+        f2Error(i,j)=rmse(f2,f2Separated);
+        predF1(:,i*j)=f1Separated;
+        predF2(:,i*j)=f2Separated;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+toc
+</pre>
+<pre class="codeoutput">
+Elapsed time is 133.589662 seconds.
+</pre><h2>1.4 Plot of error grpah: Avf. Realtive Error, F1 RMS &amp; F2 RMS<a name="5"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Avg. Relative error'</span>)
+avg=avg./max(avg(:));
+x=s'; c = {<span class="string">'g'</span>,<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'r'</span>,<span class="string">'y'</span>,<span class="string">'c'</span>,<span class="string">'k'</span>};
+<span class="keyword">for</span> j=1:size(avg,2)
+    y=avg(:,j);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{j})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+title(<span class="string">'\fontsize{10}{\color{magenta} Avg. Relative error}'</span>);
+grid <span class="string">on</span>;
+xlabel(<span class="string">'Sparsity'</span>);
+ylabel(<span class="string">'Avg. Relative error'</span>);
+legend(<span class="string">'std:0'</span>,<span class="string">'std:0.1'</span>,<span class="string">'std:0.3'</span>,<span class="string">'std:0.4'</span>,<span class="string">'std:0.6'</span>,<span class="string">'std:0.8'</span>,<span class="string">'std:1'</span>,<span class="string">'Location'</span>,<span class="string">'northwest'</span>);
+
+
+<span class="comment">% F1 error</span>
+figure(<span class="string">'name'</span>,<span class="string">'F1'</span>)
+x=s'; c = {<span class="string">'g'</span>,<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'r'</span>,<span class="string">'y'</span>,<span class="string">'c'</span>,<span class="string">'k'</span>};
+<span class="keyword">for</span> j=1:size(f1Error,2)
+    y=f1Error(:,j);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{j})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+title(<span class="string">'\fontsize{10}{\color{magenta} F1 RMS Error}'</span>);
+grid <span class="string">on</span>;
+xlabel(<span class="string">'Sparsity'</span>);
+ylabel(<span class="string">'RMS'</span>);
+
+legend(<span class="string">'std:0'</span>,<span class="string">'std:0.1'</span>,<span class="string">'std:0.3'</span>,<span class="string">'std:0.4'</span>,<span class="string">'std:0.6'</span>,<span class="string">'std:0.8'</span>,<span class="string">'std:1'</span>,<span class="string">'Location'</span>,<span class="string">'northwest'</span>);
+
+<span class="comment">% F2 error</span>
+figure(<span class="string">'name'</span>,<span class="string">'F2'</span>)
+x=s'; c = {<span class="string">'g'</span>,<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'r'</span>,<span class="string">'y'</span>,<span class="string">'c'</span>,<span class="string">'k'</span>};
+<span class="keyword">for</span> j=1:size(f2Error,2)
+    y=f2Error(:,j);
+    plot(x,y,strcat(<span class="string">'*--'</span>,c{j})),hold <span class="string">on</span>
+<span class="keyword">end</span>
+title(<span class="string">'\fontsize{10}{\color{magenta} F2 RMS Error}'</span>);
+grid <span class="string">on</span>;
+xlabel(<span class="string">'Sparsity'</span>);
+ylabel(<span class="string">'RMS'</span>);
+legend(<span class="string">'std:0'</span>,<span class="string">'std:0.1'</span>,<span class="string">'std:0.3'</span>,<span class="string">'std:0.4'</span>,<span class="string">'std:0.6'</span>,<span class="string">'std:0.8'</span>,<span class="string">'std:1'</span>,<span class="string">'Location'</span>,<span class="string">'northwest'</span>);
+</pre><img vspace="5" hspace="5" src="MyMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="MyMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="MyMainScript_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% f=f1+f2
+%% Assignment4-3 
+% Rollno: 163059009, 16305R011 
+
+%% 1.2 Init
+clear all;
+f =zeros(128,1);
+s=[5,10,20,25,35,40,45,50];%number of sparse elements per signal
+% sigma = 0.05× average value of f1 + f2 .
+stdev=[0,0.1,0.3,0.4,0.6,0.8,1];
+
+%s=[50];
+%stdev=[0];
+A1 = conj(dftmtx(128))/128;
+A2=eye(128); %identity matrix
+% Result Info
+avg=zeros(size(s,2),size(stdev,2));
+f1Error=zeros(size(s,2),size(stdev,2));
+f2Error=zeros(size(s,2),size(stdev,2));
+predF1=zeros(128,size(s,2)*size(stdev,2));
+predF2=zeros(128,size(s,2)*size(stdev,2));
+%% 1.2 Algo: Alternate Minimization
+% This algo uses the "Alternate Minimization" for the reconstruction.
+% 
+% Objective Function:
+%
+% $E(\theta_1,\theta_2) = || f-A_1\theta_1-A_2\theta_2||_2$ 
+%  |s.t| $\theta_1 \leq T_0$ |and|  $\theta_2 \leq T_0$ 
+% 
+% Where,
+%
+% $f1=A_1\theta_1$ |s.t| $A_1 = \phi \Psi_1$
+% |s.t A1 is DFT matrix of 128x128 &| $\theta_1$ |is| $T_0$ |sparse|
+%
+% $f2=A_2\theta_2$ |s.t| $A_1 = \phi \Psi_2$
+% 
+% $\Psi_1$ 1d-DFT Matrix, $\Psi_1 \in R^{128\times128}$
+%
+% $\Psi_2$ Identity Matrix, $\Psi_1 \in R^{128\times128}$
+% 
+% As we know that by C.S theory identity matrix is highly *incoherent* with DFT. 
+%
+% So here, $\phi$ is *Identity Matrix*, $\phi \in R^{128\times128}$
+%
+% Therefore,
+%
+% $A_1 = \Psi_1$
+%
+% $A_2 =  \Psi_2$
+% 
+% *Algo*
+%
+% For finding $\theta_1$ & $\theta_2$, we will use OMP with $T_0$.
+% 
+% * Initalize: $\theta_2$ to some random value
+% * Do the following till convergence (ith iteration)
+% 
+% # $f'=f-A_2*\theta_2^i$ 
+% # $\theta_1^{i+1} = OMP (f',A_1,T_0)$
+% # $f''=f-A_1*\theta_1^{i+1}$
+% # $\theta_2^{i+1} = OMP (f'',A_2,T_0)$
+%
+
+%% 1.3. Creating f from f1 and f2 and reconstructing f1 & f2 from f
+
+tic
+for i=1:size(s,2)
+    fprintf('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-[sparsity:%d]REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-\n',s(i));
+    % Creating signal f1 with s(i) sparse
+    supportF1=randi([1,128],1,s(i));
+    coeff=randi([1,100],1,s(i));   
+    f1=A1(:,supportF1)*coeff';
+    
+    % Creating signal f2 with s(i) sparse   
+    supportF2=randi([1,128],1,s(i));
+    coeff=randi([1,100],1,s(i)); % can change this
+    f2=A2(:,supportF2)*coeff'; 
+    
+    %Creating signal f
+    f=f1+f2;T0=s(i); % Used in OMP Algo                     
+    for j=1:size(stdev,2)
+          fprintf('###########[std:%f]##############\n',stdev(j));
+        % Adding Noise added
+        std=stdev(j).*mean(f);
+        noise=randn(128,1)*std;
+        noisyF=f+noise;
+        % Using alternate min. technique to find coeffs        
+        [f1Separated,f2Separated]=findSepratedSignals(noisyF,A1,A2,T0);        
+        %fprintf('sparsity=%d sigma=%f error=%f\n',s(i),stdev(j),norm(f-(f1Separated+f2Separated)));
+        avg(i,j)=avgRelativeError([f1,f2],[f1Separated,f2Separated]);
+        f1Error(i,j)=rmse(f1,f1Separated);
+        f2Error(i,j)=rmse(f2,f2Separated);
+        predF1(:,i*j)=f1Separated;
+        predF2(:,i*j)=f2Separated;
+    end
+end
+toc
+%% 1.4 Plot of error grpah: Avf. Realtive Error, F1 RMS & F2 RMS
+
+figure('name','Avg. Relative error')
+avg=avg./max(avg(:));
+x=s'; c = {'g','m','b','r','y','c','k'};
+for j=1:size(avg,2)
+    y=avg(:,j);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{j})),hold on      
+end
+title('\fontsize{10}{\color{magenta} Avg. Relative error}');
+grid on;
+xlabel('Sparsity');
+ylabel('Avg. Relative error');
+legend('std:0','std:0.1','std:0.3','std:0.4','std:0.6','std:0.8','std:1','Location','northwest');
+
+
+% F1 error
+figure('name','F1')
+x=s'; c = {'g','m','b','r','y','c','k'};
+for j=1:size(f1Error,2)
+    y=f1Error(:,j);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{j})),hold on      
+end
+title('\fontsize{10}{\color{magenta} F1 RMS Error}');
+grid on;
+xlabel('Sparsity');
+ylabel('RMS');
+
+legend('std:0','std:0.1','std:0.3','std:0.4','std:0.6','std:0.8','std:1','Location','northwest');
+
+% F2 error
+figure('name','F2')
+x=s'; c = {'g','m','b','r','y','c','k'};
+for j=1:size(f2Error,2)
+    y=f2Error(:,j);
+    plot(x,y,strcat('*REPLACE_WITH_DASH_DASH',c{j})),hold on      
+end
+title('\fontsize{10}{\color{magenta} F2 RMS Error}');
+grid on;
+xlabel('Sparsity');
+ylabel('RMS');
+legend('std:0','std:0.1','std:0.3','std:0.4','std:0.6','std:0.8','std:1','Location','northwest');
+
+
+
+##### SOURCE END #####
+--></body></html>

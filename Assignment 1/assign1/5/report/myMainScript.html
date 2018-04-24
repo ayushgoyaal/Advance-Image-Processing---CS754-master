@@ -1,0 +1,386 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assignment1-5: Compressive Video Acquisition using coded snapshot</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-02-10"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assignment1-5: Compressive Video Acquisition using coded snapshot</h1><!--introduction--><div><ul><li>Rollno: 163059009, 16305R011</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Init</a></li><li><a href="#2">1. Part(a) Fetch T=3 frames</a></li><li><a href="#3">2. Creating Random Code Matrix</a></li><li><a href="#4">2.1 Creating Coded Snapshot</a></li><li><a href="#5">2.2 Showing the "Coded snapshot"</a></li><li><a href="#6">3. Part(c): Equation in the form <img src="myMainScript_eq06589965777353205872.png" alt="$Ax = b$"></a></li><li><a href="#7">4. Part(d &amp; e): Reconstruction</a></li><li><a href="#8">4.1 Showing o/p</a></li><li><a href="#9">5. Video Acquisition and Reconstuction for # of Frames 5</a></li><li><a href="#10">6. Video Acquisition and Reconstuction for # of Frames 7</a></li></ul></div><h2>Init<a name="1"></a></h2><p>adding path for MMREAD</p><pre class="codeinput">addpath(<span class="string">'../MMread'</span>);
+file=<span class="string">'../input/cars.avi'</span>;
+video=mmread(file,1:10,[],false,true);
+H=120;W=240;
+</pre><h2>1. Part(a) Fetch T=3 frames<a name="2"></a></h2><pre class="codeinput">T=3; <span class="comment">%no.of frames</span>
+frame=fetchFrames(video,T,H,W) ;
+</pre><h2>2. Creating Random Code Matrix<a name="3"></a></h2><pre class="codeinput">C=generateCodeMtx(H,W,T);
+</pre><h2>2.1 Creating Coded Snapshot<a name="4"></a></h2><pre class="codeinput">noiseStd=2.0;
+E=generateCodedSnapshot(frame,C,noiseStd);
+</pre><h2>2.2 Showing the "Coded snapshot"<a name="5"></a></h2><pre class="codeinput">figure(<span class="string">'name'</span>,<span class="string">'Coded snapshot with noise'</span>);
+imshow(E/max(E(:)));
+title(<span class="string">'\fontsize{10}{\color{magenta}Coded snapshot with noise for T=3}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>3. Part(c): Equation in the form <img src="myMainScript_eq06589965777353205872.png" alt="$Ax = b$"><a name="6"></a></h2><p>C(t): Code for the 't' frame where <img src="myMainScript_eq13162745469804305266.png" alt="$t:1 \rightarrow T$"></p><p>E: Coded Snapshot</p><p>Objective: Estimate <img src="myMainScript_eq15825155141956732146.png" alt="$F_t$"> of original video where <img src="myMainScript_eq13162745469804305266.png" alt="$t:1 \rightarrow T$"></p><p>We can write our coded Snapshot equation as Ax=b</p><p>Here, <img src="myMainScript_eq06882372370120827763.png" alt="$E= C_1.*F_1 + C_2.*F_2 + \cdots + C_T.*F_T$"></p><p>We can write <img src="myMainScript_eq16961342739485963218.png" alt="$F_t=\Psi * \theta_t$"></p><p>Let <img src="myMainScript_eq04388224573961735733.png" alt="$\phi_1 = C_1 , \phi_2 = C_2 \cdots \phi_t = C_t$"></p><p>Therefore, <img src="myMainScript_eq17201718689809092114.png" alt="$\Phi = [  diag(\phi_1) | diag(\phi_2) | \cdots | diag(\phi_T) ]$"></p><p>We get <img src="myMainScript_eq01908532921846404702.png" alt="$\Phi$"> dimension as NxNT where N is the no. of pixel</p><p>Let <img src="myMainScript_eq15825155141956732146.png" alt="$F_t$"> = Col Vector of Pixels,  then</p><p><img src="myMainScript_eq18000482176573084649.png" alt="$F = [ F_1^t , F_2^t , \cdots ,  F_T^t,]^t$"></p><p><img src="myMainScript_eq16549573144495785684.png" alt="$E= \Phi * \Psi * F$"> ,</p><p>where <img src="myMainScript_eq12822177478652287827.png" alt="$\Psi$">  can be 3D-DCT of NTxNT or Block diagonal of 2D-DCT per frame</p><p>In our we are taking, <img src="myMainScript_eq12822177478652287827.png" alt="$\Psi$"> as  Block diagonal of 2D-DCT per frame but for 8x8 patches</p><p>Therefore here, b = E, x = F and A =  <img src="myMainScript_eq11393333856977151494.png" alt="$\Phi * \Psi$"></p><h2>4. Part(d &amp; e): Reconstruction<a name="7"></a></h2><p><b>Part(d)</b></p><p>As in above mentioned i.e 'section 3' the dimentsion of A,b,x are very large to compute in one go in limited harware system. So to solve this problem we will do patchwise i.e by taking 8x8 overlapping patching.</p><p>Let <b>P</b> be the some patch of dim 8x8 cornered at top-left at point (x1,y1)</p><p>Let <img src="myMainScript_eq15825155141956732146.png" alt="$F_t$"> = Col. vector of pixels for P, so the dimension of <img src="myMainScript_eq15825155141956732146.png" alt="$F_t$"> is 64x1</p><p><img src="myMainScript_eq18000482176573084649.png" alt="$F = [ F_1^t , F_2^t , \cdots ,  F_T^t,]^t$"> having dimension  64Tx1</p><p>Let <img src="myMainScript_eq15161047919679960262.png" alt="$Cp(t)$">: Code for patch, cornered at top-left at point (x1,y1) for the 't' frame where <img src="myMainScript_eq13162745469804305266.png" alt="$t:1 \rightarrow T$"></p><p>So the dimension of <img src="myMainScript_eq08180918908409176757.png" alt="$C_p(t)$"> is 8x8</p><p>Let <img src="myMainScript_eq04752831972554854113.png" alt="$\phi_1 = Cp_1 , \phi_2 = Cp_2 \cdots \phi_t = Cp_t$"></p><p>Therefore, <img src="myMainScript_eq17201718689809092114.png" alt="$\Phi = [  diag(\phi_1) | diag(\phi_2) | \cdots | diag(\phi_T) ]$"></p><p>We get <img src="myMainScript_eq01908532921846404702.png" alt="$\Phi$"> dimension as 64x64T where 64 is the no. of pixel in the patch</p><p>Each 8x8 patch is sparse in 2D-DCT. So we create <img src="myMainScript_eq01982406464486259838.png" alt="$\psi$"> as 2d dct of  64x64</p><p>Therefore, <img src="myMainScript_eq12822177478652287827.png" alt="$\Psi$"> = Block diagonal of 2D-DCT per frame, dimension <img src="myMainScript_eq12822177478652287827.png" alt="$\Psi$"> 64Tx64T</p><p>So, <b>A</b>= <img src="myMainScript_eq11393333856977151494.png" alt="$\Phi * \Psi$"></p><p>Let <b>b</b> is vectorised form the patch taken from the <b>Coded Snapshot (E)</b> cornered at top-left point (x1,y1)</p><p>Therefore, we have solve <img src="myMainScript_eq06589965777353205872.png" alt="$Ax = b$">, where x= F</p><pre class="codeinput">tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+</pre><pre class="codeoutput">Elapsed time is 170.463639 seconds.
+</pre><h2>4.1 Showing o/p<a name="8"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:T
+    figure(<span class="string">'name'</span>,<span class="string">'Result T=3'</span>);
+
+    <span class="comment">% Original</span>
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{red} Orginal T=3: Frame %d}'</span>,i);
+    title(label);
+
+    <span class="comment">% Reconstruction</span>
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{magenta} Reconst. T=3: Frame %d}'</span>,i);
+    title(label);
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2>5. Video Acquisition and Reconstuction for # of Frames 5<a name="9"></a></h2><pre class="codeinput">T=5; <span class="comment">%no.of frames</span>
+frame=fetchFrames(video,T,H,W) ;
+C=generateCodeMtx(H,W,T);
+noiseStd=2.0;
+
+<span class="comment">% Create Coded Snapshot</span>
+E=generateCodedSnapshot(frame,C,noiseStd);
+
+figure(<span class="string">'name'</span>,<span class="string">'Coded snapshot with noise'</span>);
+imshow(E/max(E(:)));
+title(<span class="string">'\fontsize{10}{\color{magenta}Coded snapshot with noise for T=5}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+<span class="comment">% Reconstruction using C.S</span>
+tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+
+<span class="comment">%  Showing o/p</span>
+<span class="keyword">for</span> i=1:T
+    figure(<span class="string">'name'</span>,<span class="string">'Result T=5'</span>);
+
+    <span class="comment">% Original</span>
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{red} Orginal T=5: Frame %d}'</span>,i);
+    title(label);
+
+    <span class="comment">% Reconstruction</span>
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{magenta} Reconst. T=5: Frame %d}'</span>,i);
+    title(label);
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Elapsed time is 223.547259 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_10.png" alt=""> <h2>6. Video Acquisition and Reconstuction for # of Frames 7<a name="10"></a></h2><pre class="codeinput">T=7; <span class="comment">%no.of frames</span>
+frame=fetchFrames(video,T,H,W) ;
+C=generateCodeMtx(H,W,T);
+noiseStd=2.0;
+
+<span class="comment">% Create Coded Snapshot</span>
+E=generateCodedSnapshot(frame,C,noiseStd);
+
+figure(<span class="string">'name'</span>,<span class="string">'Coded snapshot with noise'</span>);
+imshow(E/max(E(:)));
+title(<span class="string">'\fontsize{10}{\color{magenta}Coded snapshot with noise for T=7}'</span>);
+axis <span class="string">tight</span>,axis <span class="string">on</span>;
+
+<span class="comment">% Reconstruction using C.S</span>
+tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+
+<span class="comment">%  Showing o/p</span>
+<span class="keyword">for</span> i=1:T
+    figure(<span class="string">'name'</span>,<span class="string">'Result T=5'</span>);
+
+    <span class="comment">% Original</span>
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{red} Orginal T=7: Frame %d}'</span>,i);
+    title(label);
+
+    <span class="comment">% Reconstruction</span>
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf(<span class="string">'\\fontsize{10}{\\color{magenta} Reconst. T=7: Frame %d}'</span>,i);
+    title(label);
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Elapsed time is 292.520851 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_11.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_12.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_13.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_14.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_15.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_16.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_17.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_18.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Assignment1-5: Compressive Video Acquisition using coded snapshot
+% * Rollno: 163059009, 16305R011
+
+%% Init
+% adding path for MMREAD
+addpath('../MMread');
+file='../input/cars.avi';
+video=mmread(file,1:10,[],false,true);
+H=120;W=240;
+
+%% 1. Part(a) Fetch T=3 frames
+T=3; %no.of frames
+frame=fetchFrames(video,T,H,W) ; 
+
+%% 2. Creating Random Code Matrix 
+
+C=generateCodeMtx(H,W,T);
+
+%% 2.1 Creating Coded Snapshot
+
+noiseStd=2.0;
+E=generateCodedSnapshot(frame,C,noiseStd);
+
+%% 2.2 Showing the "Coded snapshot"
+
+figure('name','Coded snapshot with noise');
+imshow(E/max(E(:)));
+title('\fontsize{10}{\color{magenta}Coded snapshot with noise for T=3}');
+axis tight,axis on;
+
+
+%% 3. Part(c): Equation in the form $Ax = b$
+%
+% C(t): Code for the 't' frame where $t:1 \rightarrow T$
+%
+% E: Coded Snapshot
+% 
+% Objective: Estimate $F_t$ of original video where $t:1 \rightarrow T$
+% 
+% We can write our coded Snapshot equation as Ax=b 
+%
+% Here, $E= C_1.*F_1 + C_2.*F_2 + \cdots + C_T.*F_T$
+% 
+% We can write $F_t=\Psi * \theta_t$
+% 
+% Let $\phi_1 = C_1 , \phi_2 = C_2 \cdots \phi_t = C_t$
+% 
+% Therefore, $\Phi = [  diag(\phi_1) | diag(\phi_2) | \cdots | diag(\phi_T)
+% ]$
+% 
+% We get $\Phi$ dimension as NxNT where N is the no. of pixel
+% 
+% Let $F_t$ = Col Vector of Pixels,  then 
+% 
+% $F = [ F_1^t , F_2^t , \cdots ,  F_T^t,]^t$
+% 
+% $E= \Phi * \Psi * F$ , 
+% 
+% where $\Psi$  can be 3D-DCT of NTxNT or Block diagonal of 2D-DCT per frame 
+%
+% In our we are taking, $\Psi$ as  Block diagonal of 2D-DCT per frame but
+% for 8x8 patches
+%
+% Therefore here, b = E, x = F and A =  $\Phi * \Psi$
+
+
+%% 4. Part(d & e): Reconstruction
+% *Part(d)*
+% 
+% As in above mentioned i.e 'section 3' the dimentsion of A,b,x are very
+% large to compute in one go in limited harware system. So to solve this
+% problem we will do patchwise i.e by taking 8x8 overlapping patching. 
+%
+% Let *P* be the some patch of dim 8x8 cornered at top-left at point (x1,y1)
+%
+% Let $F_t$ = Col. vector of pixels for P, so the dimension of
+% $F_t$ is 64x1
+% 
+% $F = [ F_1^t , F_2^t , \cdots ,  F_T^t,]^t$ having dimension  64Tx1
+% 
+% Let $Cp(t)$: Code for patch, cornered at top-left at point (x1,y1) for the 't' frame 
+% where $t:1 \rightarrow T$
+% 
+% So the dimension of $C_p(t)$ is 8x8
+% 
+% Let $\phi_1 = Cp_1 , \phi_2 = Cp_2 \cdots \phi_t = Cp_t$
+% 
+% Therefore, $\Phi = [  diag(\phi_1) | diag(\phi_2) | \cdots | diag(\phi_T)
+% ]$
+% 
+% We get $\Phi$ dimension as 64x64T where 64 is the no. of pixel in the
+% patch
+%
+% Each 8x8 patch is sparse in 2D-DCT. So we create $\psi$ as 2d dct of
+%  64x64
+%
+% Therefore, $\Psi$ = Block diagonal of 2D-DCT per frame, dimension $\Psi$ 64Tx64T 
+% 
+% So, *A*= $\Phi * \Psi$
+%
+% Let *b* is vectorised form the patch taken from the *Coded Snapshot (E)*
+% cornered at top-left point (x1,y1)
+%
+% Therefore, we have solve $Ax = b$, where x= F 
+
+
+tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+
+%% 4.1 Showing o/p
+for i=1:T
+    figure('name','Result T=3');
+    
+    % Original    
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{red} Orginal T=3: Frame %d}',i);
+    title(label);   
+    
+    % Reconstruction       
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{magenta} Reconst. T=3: Frame %d}',i);
+    title(label);      
+    
+end
+%% 5. Video Acquisition and Reconstuction for # of Frames 5
+
+T=5; %no.of frames
+frame=fetchFrames(video,T,H,W) ; 
+C=generateCodeMtx(H,W,T);
+noiseStd=2.0;
+
+% Create Coded Snapshot
+E=generateCodedSnapshot(frame,C,noiseStd);
+
+figure('name','Coded snapshot with noise');
+imshow(E/max(E(:)));
+title('\fontsize{10}{\color{magenta}Coded snapshot with noise for T=5}');
+axis tight,axis on;
+
+% Reconstruction using C.S
+tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+
+%  Showing o/p
+for i=1:T
+    figure('name','Result T=5');
+    
+    % Original    
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{red} Orginal T=5: Frame %d}',i);
+    title(label);   
+    
+    % Reconstruction       
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{magenta} Reconst. T=5: Frame %d}',i);
+    title(label);      
+    
+end
+
+%% 6. Video Acquisition and Reconstuction for # of Frames 7
+
+T=7; %no.of frames
+frame=fetchFrames(video,T,H,W) ; 
+C=generateCodeMtx(H,W,T);
+noiseStd=2.0;
+
+% Create Coded Snapshot
+E=generateCodedSnapshot(frame,C,noiseStd);
+
+figure('name','Coded snapshot with noise');
+imshow(E/max(E(:)));
+title('\fontsize{10}{\color{magenta}Coded snapshot with noise for T=7}');
+axis tight,axis on;
+
+% Reconstruction using C.S
+tic
+patchSize=8;ompEpsilon=6;
+[outputImg]=reconstruct(E,T,C,patchSize,ompEpsilon);
+toc
+
+%  Showing o/p
+for i=1:T
+    figure('name','Result T=5');
+    
+    % Original    
+    subplot(1,2,1);
+    imshow(frame(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{red} Orginal T=7: Frame %d}',i);
+    title(label);   
+    
+    % Reconstruction       
+    subplot(1,2,2);
+    imshow(outputImg(:,:,i),[]);
+    label= sprintf('\\fontsize{10}{\\color{magenta} Reconst. T=7: Frame %d}',i);
+    title(label);      
+    
+end
+
+##### SOURCE END #####
+--></body></html>
